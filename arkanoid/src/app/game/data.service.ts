@@ -20,7 +20,7 @@ export class DataSounds {
         gameOver: new Howl({
             src: ['../assets/sounds/gameOver.wav']
         }),
-        brickBump: new Howl({
+        destroyBrick: new Howl({
             src: ['../assets/sounds/brickBump.wav']
         }),
         playerBump: new Howl({
@@ -48,8 +48,3 @@ export class DataSounds {
         this.point.next(point);
     }
 }
-
-
-
-
-

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { DataSounds } from '../data.service'
 
 @Component({
-    selector: 'player',
+    selector: 'app-player',
     template: ``,
     styles: ['']
 })
@@ -10,8 +10,8 @@ import { DataSounds } from '../data.service'
 export class PlayerComponent implements OnInit {
 
     //Начальная позиция игрока
-    positionWidth: number = 770;
-    positionheight: number = 760;
+    x: number = 770;
+    y: number = 760;
 
     //Размер игрока :)
     width: number = 260;
@@ -27,8 +27,8 @@ export class PlayerComponent implements OnInit {
 
     //Перемещение игрока до начала игра
     move() {
-        if (((this.positionWidth + this.dx) > 0) && ((this.positionWidth + this.dx) < this.canvas.width - this.width)) {
-            this.positionWidth += this.dx;
+        if (((this.x + this.dx) > 0) && ((this.x + this.dx) < this.canvas.width - this.width)) {
+            this.x += this.dx;
         }
     }
 

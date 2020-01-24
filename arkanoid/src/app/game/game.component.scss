@@ -1,0 +1,13 @@
+$playingFieldColor: #393939;
+$fieldBorderColor: black;
+
+canvas {
+	width: 95%;
+	box-sizing: border-box;
+	border: 0.25vw solid $fieldBorderColor;
+	border-radius: 20px;
+	margin: 2.5%;
+	background-color: $playingFieldColor;
+}
+
+

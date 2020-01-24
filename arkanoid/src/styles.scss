@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+$fielBackground: #222222;
+
+* {
+	padding: 0;
+	margin: 0;
+	outline: 0;
+	border: none;
+}
+body {
+	background-color: $fielBackground;
+	cursor: none;
+}
