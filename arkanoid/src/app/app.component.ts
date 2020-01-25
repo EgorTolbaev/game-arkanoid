@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { GameComponent } from './game/game.component';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'my-app',
+  template: `  <div>
+                    <router-outlet></router-outlet>
+               </div>`
 })
+
 export class AppComponent {
-  title = 'arkanoid';
+  constructor(private router: Router) { }
 }

@@ -2,15 +2,22 @@ import { Component, ViewChild, ElementRef, OnInit, Renderer2 } from '@angular/co
 import { BallComponent } from './ball/ball.component';
 import { PlayerComponent } from './player/player.component';
 import { DataGame } from './data.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-game',
-    template: `
+    template: `<div>
+    <button type="button" class="btn btn-warning"style="margin-top: 6px;" (click)="goHome() ">На главную</button>
     <canvas #canvas width=1800 height=820></canvas>
     `,
     styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
+
+    goHome() {
+  
+      this.router.navigate(['']);
+    }
 
     @ViewChild('canvas', { static: true }) canvas: ElementRef;
     ctx: CanvasRenderingContext2D;
@@ -263,6 +270,6 @@ export class GameComponent implements OnInit {
         this.running = false;
     }
 
-    constructor(private data: DataGame, private renderer: Renderer2) {
+    constructor(private data: DataGame, private renderer: Renderer2,private router: Router) {
     }
 }
