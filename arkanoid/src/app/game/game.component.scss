@@ -1,4 +1,4 @@
-$playingFieldColor: #393939;
+$playingFieldColor:linear-gradient(to top, #c72e2e, #4d63e0);
 $fieldBorderColor: black;
 
 canvas {
@@ -7,7 +7,7 @@ canvas {
 	border: 0.25vw solid $fieldBorderColor;
 	border-radius: 20px;
 	margin: 2.5%;
-	background-color: $playingFieldColor;
+	background: $playingFieldColor;
 }
 
 

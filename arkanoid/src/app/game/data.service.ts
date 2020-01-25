@@ -6,7 +6,7 @@ import { Howl } from 'howler'
     providedIn: 'root'
 })
 
-export class DataSounds {
+export class DataGame {
     sounds = {
         backgroundMusic: new Howl({
             src: ['../assets/sounds/backgroundMusic.mp3'],

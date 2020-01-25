@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { BallComponent } from './ball/ball.component';
 import { PlayerComponent } from './player/player.component';
-import { DataSounds } from './data.service';
+import { DataGame } from './data.service';
 
 @Component({
     selector: 'app-game',
@@ -15,19 +15,36 @@ export class GameComponent implements OnInit {
     @ViewChild('canvas', { static: true }) canvas: ElementRef;
     ctx: CanvasRenderingContext2D;
 
-    width = this.data.canvas.width;
-    height = this.data.canvas.height;
-    rows = 5;
-    cols = 10;
-    running = true;
-    restarting = false;
+    //Клавиши управления
+    arrowLeft: number = 37;
+    keyA: number = 65;
+    arrowRight: number = 39;
+    keyD: number = 68;
+    space: number = 32;
+    keyR: number = 82;
 
-    sprites = {
+    //настройка игрового пространства
+    width: number = this.data.canvas.width;
+    height: number = this.data.canvas.height;
+    rows: number = 5;
+    cols: number = 10;
+    running: boolean = true;
+    restarting: boolean = false;
+
+    private _sprites = {
         brick: undefined,
         ball: undefined,
         player: undefined,
         scoreTable: undefined
     };
+
+    public get sprites() {
+        return this._sprites;
+    }
+
+    public set sprites(value) {
+        this._sprites = value;
+    }
 
     ball = new BallComponent(this.data);
     player = new PlayerComponent(this.data);
@@ -35,22 +52,19 @@ export class GameComponent implements OnInit {
     score = 0;
 
     ngOnInit() {
-
-        this.ctx = (this.canvas.nativeElement as HTMLCanvasElement).getContext('2d');
-        this.ctx.font = 'bold 40px Chakra Petch';
-        this.ctx.fillStyle = '#fff';
+        this.fieldSetting();
         this.startGame();
 
         this.data.currentPoint.subscribe(score => this.score = score);
 
         this.renderer.listen('document', 'keydown', (e) => {
-            if (e.keyCode === 37) {
+            if (e.keyCode === this.arrowLeft || e.keyCode === this.keyA) {
                 this.player.dx = -this.player.speedPlayer;
 
                 if (this.player.ball.isOnPlayer) {
                     this.ball.dx = this.player.dx;
                 }
-            } else if (e.keyCode === 39) {
+            } else if (e.keyCode === this.arrowRight || e.keyCode === this.keyD) {
                 this.player.dx = this.player.speedPlayer;
                 if (this.player.ball.isOnPlayer) {
                     this.ball.dx = this.player.dx;
@@ -66,7 +80,7 @@ export class GameComponent implements OnInit {
         });
 
         this.renderer.listen('document', 'keydown', (e) => {
-            if (e.keyCode === 32 && this.running && this.player.ball.isOnPlayer) {
+            if (e.keyCode === this.space && this.running && this.player.ball.isOnPlayer) {
                 this.ball.ballLaunch();
 
                 // ball is not on player anymore
@@ -76,12 +90,24 @@ export class GameComponent implements OnInit {
         });
 
         this.renderer.listen('document', 'keydown', (e) => {
-            if (e.keyCode === 82 && this.running === false) {
+            if (e.keyCode === this.keyR && this.running === false) {
                 this.restart();
             }
         });
     }
 
+    /**
+    * настройка игрового поля
+    */
+    private fieldSetting() {
+        this.ctx = (this.canvas.nativeElement as HTMLCanvasElement).getContext('2d');
+        this.ctx.font = 'bold 40px Chakra Petch';
+        this.ctx.fillStyle = '#fff';
+    }
+
+    /**
+    * загрузка спрайтов
+    */
     spritesLoading() {
         for (const sprite in this.sprites) {
             if (sprite) {
@@ -91,6 +117,13 @@ export class GameComponent implements OnInit {
         }
     }
 
+    /**
+    * создание кирпичей
+    * @var {number} x - задача расстояние между блоками по горизонтали
+    * @var {number} y - задача расстояние между блоками по вертикали
+    * @var {number} width - ширина блока
+    * @var {number} height - длина блока
+    */
     createBricks() {
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
@@ -111,18 +144,21 @@ export class GameComponent implements OnInit {
         this.runGame();
     }
 
-    render() {
+    /**
+     * отрисовка спринтов
+     */
+    renderSprites() {
 
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        this.ctx.drawImage(this.sprites.scoreTable, -5, this.height - 125);
-        this.ctx.fillText('Очки: ' + this.score, 20, this.height - 75);
+        //this.ctx.drawImage(this.sprites.scoreTable, -5, this.height - 885);
+        this.ctx.fillText('Очки: ' + this.score, 20, this.height - 840);
 
         this.ctx.drawImage(this.sprites.player, this.player.x, this.player.y);
 
         this.bricks.forEach(function (e) {
             if (e.isAlive) {
-                this.ctx.drawImage(this.sprites.brick, e.x, e.y);
+                this.ctx.drawImage(this.sprites.brick, e.x, e.y + 50);
             }
         }, this);
 
@@ -133,6 +169,9 @@ export class GameComponent implements OnInit {
         }
     }
 
+    /**
+     * реакция на изменения на поле
+     */
     detectСhanges() {
         if (this.score >= this.bricks.length) {
             this.over('Вы победили :)');
@@ -161,7 +200,7 @@ export class GameComponent implements OnInit {
         this.ball.collisionsWithBorders();
 
         if (this.player.dx) {
-            this.player.move();
+            this.player.movePlayer();
         }
 
         if (this.ball.ballCollision(this.player)) {
@@ -171,6 +210,12 @@ export class GameComponent implements OnInit {
 
     restart() {
         this.score = 0;
+        this.bricks.forEach((el) => {
+            if (el.isAlive) {
+                this.ball.resettingPoints(el);
+
+            }
+        });
         this.restarting = true;
         this.runGame();
 
@@ -193,7 +238,7 @@ export class GameComponent implements OnInit {
             this.running = true;
             this.detectСhanges();
             this.spritesLoading();
-            this.render();
+            this.renderSprites();
             requestAnimationFrame(() => {
                 this.runGame();
             });
@@ -203,7 +248,7 @@ export class GameComponent implements OnInit {
     }
 
 
-    over(message) {
+    over(message: string) {
         if (message === 'Игра закончена') {
             this.data.sounds.gameOver.play();
         } else if (message === 'Вы победили :)') {
@@ -218,6 +263,6 @@ export class GameComponent implements OnInit {
         this.running = false;
     }
 
-    constructor(private data: DataSounds, private renderer: Renderer2) {
+    constructor(private data: DataGame, private renderer: Renderer2) {
     }
 }

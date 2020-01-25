@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { DataSounds } from '../data.service'
+import { DataGame } from '../data.service'
 
 @Component({
     selector: 'app-player',
@@ -17,7 +17,7 @@ export class PlayerComponent implements OnInit {
     width: number = 260;
     height: number = 32;
 
-    //Скорость игрока
+    /**Скорость игрока*/
     speedPlayer: number = 10;
     dx: number = 0;
 
@@ -25,8 +25,8 @@ export class PlayerComponent implements OnInit {
 
     ball = { isOnPlayer: true };
 
-    //Перемещение игрока до начала игра
-    move() {
+    /**Перемещение игрока до начала игра*/
+    movePlayer() {
         if (((this.x + this.dx) > 0) && ((this.x + this.dx) < this.canvas.width - this.width)) {
             this.x += this.dx;
         }
@@ -36,7 +36,7 @@ export class PlayerComponent implements OnInit {
         this.dx = 0;
     }
 
-    constructor(private data: DataSounds) { }
+    constructor(private data: DataGame) { }
 
     ngOnInit() { }
 

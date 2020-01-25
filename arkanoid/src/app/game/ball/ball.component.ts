@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
-import { DataSounds } from '../data.service';
+import { DataGame } from '../data.service';
 
 @Component({
     selector: 'app-ball',
@@ -22,20 +22,20 @@ export class BallComponent implements OnInit {
     dx: number = 0;
     dy: number = 0;
 
-    //Статус мяча запушен/на позиции
+    /**Статус мяча запушен/на позиции*/
     isReleased = false;
 
     score = 0;
     canvas = this.data.canvas;
 
-    //Запуск мяча
+    /** Запуск мяча*/
     ballLaunch() {
         this.dy = -this.speedBall;
         this.dx = -this.speedBall;
         this.isReleased = true;
     }
 
-    //Движение мяча по canvas
+    /** Движение мяча по canvas*/
     ballMovement() {
         this.widthBall += this.dx;
         this.heightBall += this.dy;
@@ -46,8 +46,8 @@ export class BallComponent implements OnInit {
         this.dy = 0;
     }
 
-    //Проверка на то что меч столкнулся
-    ballCollision(e) {
+    /**Проверка на то что меч столкнулся*/
+    ballCollision(e: any) {
         const x = this.widthBall + this.dx;
         const y = this.heightBall + this.dy;
 
@@ -60,14 +60,20 @@ export class BallComponent implements OnInit {
         return false;
     }
 
-    //Разрушим кирпич и добавим отчку игроку
-    destroyBrick(e) {
+    /**Разрушим кирпич и добавим отчку игроку*/
+    destroyBrick(e: any) {
         this.dy *= -1;
         e.isAlive = false;
         this.data.changePoint(this.score += 1);
         this.data.sounds.destroyBrick.play();
     }
 
+    /**Обнуляем очки*/
+    resettingPoints(e: any) {
+        this.data.changePoint(this.score = 0);
+    }
+
+    /**Действия при столкновении с границами поля */
     collisionsWithBorders() {
         const x = this.widthBall + this.dx;
         const y = this.heightBall + this.dy;
@@ -87,19 +93,20 @@ export class BallComponent implements OnInit {
         }
     }
 
-    onPlayerBumpSide(player) {
-        return this.newMethod(player);
+    onPlayerBumpSide(player: any) {
+        return this.collisionWithPlayers(player);
     }
 
-    private newMethod(player: any) {
+    private collisionWithPlayers(player: any) {
         return (this.widthBall + this.width / 2) < (player.x + player.width / 2);
     }
 
-    playerBump(player) {
+    playerBump(player: any) {
         this.dy = -this.speedBall;
         this.dx = this.onPlayerBumpSide(player) ? -this.speedBall : this.speedBall;
     }
-    constructor(private data: DataSounds) { }
+
+    constructor(private data: DataGame) { }
 
     ngOnInit() {
         this.data.currentPoint.subscribe(score => this.score = score);

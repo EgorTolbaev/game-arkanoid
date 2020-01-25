@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-$fielBackground: #222222;
+$fielBackground: linear-gradient(to top, #222020, #f1da36);
 
 * {
 	padding: 0;
@@ -8,6 +8,6 @@ $fielBackground: #222222;
 	border: none;
 }
 body {
-	background-color: $fielBackground;
+	background: $fielBackground;
 	cursor: none;
 }
