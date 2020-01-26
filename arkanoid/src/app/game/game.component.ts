@@ -3,11 +3,13 @@ import { BallComponent } from './ball/ball.component';
 import { PlayerComponent } from './player/player.component';
 import { DataGame } from './data.service';
 import { Router } from '@angular/router';
+import { HomeComponent } from "../home/home.component";
 
 @Component({
     selector: 'app-game',
-    template: `<div>
+    template: `
     <button type="button" class="btn btn-warning"style="margin-top: 6px;" (click)="goHome() ">На главную</button>
+    
     <canvas #canvas width=1800 height=820></canvas>
     `,
     styleUrls: ['./game.component.scss'],
@@ -15,12 +17,19 @@ import { Router } from '@angular/router';
 export class GameComponent implements OnInit {
 
     goHome() {
-  
-      this.router.navigate(['']);
+
+        this.router.navigate(['']);
     }
 
     @ViewChild('canvas', { static: true }) canvas: ElementRef;
     ctx: CanvasRenderingContext2D;
+
+    getRandom(max:number) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+
+    playerName: string = this.userName.name1 == "" ? "player" + this.getRandom(10000) : this.userName.name1;
+
 
     //Клавиши управления
     arrowLeft: number = 37;
@@ -159,7 +168,7 @@ export class GameComponent implements OnInit {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         //this.ctx.drawImage(this.sprites.scoreTable, -5, this.height - 885);
-        this.ctx.fillText('Очки: ' + this.score, 20, this.height - 840);
+        this.ctx.fillText("Игрок:" + " " + this.playerName + ". " + 'Очки: ' + this.score, 20, this.height - 840);
 
         this.ctx.drawImage(this.sprites.player, this.player.x, this.player.y);
 
@@ -270,6 +279,8 @@ export class GameComponent implements OnInit {
         this.running = false;
     }
 
-    constructor(private data: DataGame, private renderer: Renderer2,private router: Router) {
-    }
+    constructor(private data: DataGame,
+        private renderer: Renderer2,
+        private router: Router,
+        private userName: HomeComponent) { }
 }

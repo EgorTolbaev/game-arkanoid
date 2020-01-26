@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { NgForm, FormsModule} from '@angular/forms';
 
 import { Routes, RouterModule } from '@angular/router';
 
@@ -8,8 +9,9 @@ import { GameComponent } from './game/game.component';
 import { BallComponent } from './game/ball/ball.component';
 import { PlayerComponent } from './game/player/player.component';
 import { PlayComponent } from './play.component';
-import { HomeComponent } from './home.component';
-import { NotFoundComponent } from './not-found.component'
+import { HomeComponent } from "./home/home.component";
+import { NotFoundComponent } from './not-found/not-found.component'
+
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,14 +26,16 @@ const appRoutes: Routes = [
     PlayerComponent,
     HomeComponent,
     PlayComponent,
-    NotFoundComponent
+    NotFoundComponent,
 
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    FormsModule,
+    
   ],
-  providers: [],
+  providers: [HomeComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

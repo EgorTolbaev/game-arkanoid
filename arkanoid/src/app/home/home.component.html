@@ -1,0 +1,13 @@
+<div class = "center">  
+    <p class="h1">Арканоид</p>
+
+<form #myForm="ngForm" novalidate>
+    <div class="form-group">
+        <input class="btn" name="name" [(ngModel)]="name" required placeholder="Введите свое имя"/>
+    </div>
+    <div class="form-group">
+        <button [disabled]="myForm.invalid"
+        class="btn btn-warning" (click)="submit(myForm)">Играть</button>
+    </div>
+</form>
+</div>
