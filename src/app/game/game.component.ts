@@ -24,7 +24,7 @@ export class GameComponent implements OnInit {
     @ViewChild('canvas', { static: true }) canvas: ElementRef;
     ctx: CanvasRenderingContext2D;
 
-    getRandom(max:number) {
+    getRandom(max: number) {
         return Math.floor(Math.random() * Math.floor(max));
     }
 

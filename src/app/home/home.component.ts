@@ -16,8 +16,8 @@ export class HomeComponent {
 
     submit(form: NgForm) {
 
-        this.name1 = form.value.name;
+        this.name1 = form.value;
         this.router.navigate(['/play']);
     }
-    
+
 }
